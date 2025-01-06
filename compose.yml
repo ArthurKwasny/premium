@@ -1,0 +1,40 @@
+volumes:
+  postgres:
+    external: false
+
+services:
+  database:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=$DS_USER
+      - POSTGRES_PASSWORD=$DS_PW
+
+  data-provider:
+    env_file: .env
+    build:
+      context: ./premium-data-provider
+
+  quote-service:
+    env_file: .env
+    build:
+      context: ./premium-quote
+
+  proxy-service:
+    env_file: .env
+    ports:
+      - ${PROXY_SERVICE_PORT}:${PROXY_SERVICE_PORT}
+    build:
+      context: ./premium-restproxy
+
+  web-client:
+    env_file: .env
+    ports:
+      - ${WEB_CLIENT_PORT}:${WEB_CLIENT_PORT}
+    build:
+      context: ./premium-webclient

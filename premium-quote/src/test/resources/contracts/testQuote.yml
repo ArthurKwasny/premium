@@ -1,0 +1,41 @@
+name: should return premium quote
+description: "Successfully retrieve premium quotes based on mileage, region, and vehicle type."
+request:
+  method: POST
+  urlPath: /premiums/v1/car/quote
+  headers:
+    Content-Type: application/json
+    Accept: application/json, application/problem+json
+  body:
+    factors:
+      mileage: 1000
+      regionId: 1aba33ab-5261-3286-95b4-865265d9e768
+      vehicle: CABRIO
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    policies:
+      - name: auto_flex
+        premium: 300
+      - name: drive_secure
+        premium: 400
+      - name: mobil_komfort
+        premium: 600
+---
+name: should return available policies
+description: "Retrieve available policies for premium quotes."
+request:
+  method: GET
+  urlPath: /premiums/v1/car/policy
+  headers:
+    Accept: application/json, application/problem+json
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    - auto_flex
+    - drive_secure
+    - mobil_komfort

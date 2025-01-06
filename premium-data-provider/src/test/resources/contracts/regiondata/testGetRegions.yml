@@ -1,0 +1,68 @@
+name: should return region
+request:
+  method: GET
+  urlPath: /regions/v1/region/1aba33ab-5261-3286-95b4-865265d9e768
+  headers:
+    Accept: application/json, application/problem+json
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    id: 1aba33ab-5261-3286-95b4-865265d9e768
+    postcode: 12345
+    state: BB
+    district: district
+    county: county
+    city: city
+    area: area
+---
+name: should return region array
+request:
+  method: GET
+  urlPath: /regions/v1/region
+  queryParameters:
+    postcode: 12345
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    - id: 1aba33ab-5261-3286-95b4-865265d9e768
+      state: BB
+      district: district
+      county: county
+      city: city
+      area: area
+---
+name: should return 404 not found instead of region
+request:
+  method: GET
+  urlPath: /regions/v1/region/12345678-1234-1234-1234-865265d9e768
+response:
+  status: 404
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Region not found
+    status: 404
+    detail: Region with given id not found
+    instance: "{{request.path}}"
+---
+name: should return 404 not found instead of region array
+request:
+  method: GET
+  urlPath: /regions/v1/region
+  queryParameters:
+    postcode: 54321
+response:
+  status: 404
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Region not found
+    status: 404
+    detail: Region with given postcode not found
+    instance: "{{request.path}}"

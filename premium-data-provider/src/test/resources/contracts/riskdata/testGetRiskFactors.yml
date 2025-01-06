@@ -1,0 +1,115 @@
+name: should return risk factor result
+request:
+  method: GET
+  urlPath: /factors/v1/car/risk
+  headers:
+    Accept: application/json, application/problem+json
+  queryParameters:
+    mileage: 1000
+    regionId: 1aba33ab-5261-3286-95b4-865265d9e768
+    vehicle: CABRIO
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    mileage: 0.1
+    region: 0.2
+    vehicle: 0.3
+---
+name: should return 400 for negative mileage
+request:
+  method: GET
+  urlPath: /factors/v1/car/risk
+  headers:
+    Accept: application/json, application/problem+json
+  queryParameters:
+    mileage: -1
+    regionId: 1aba33ab-5261-3286-95b4-865265d9e768
+    vehicle: CABRIO
+  matchers:
+    queryParameters:
+      - key: mileage
+        type: matching
+        value: -\d+
+response:
+  status: 400
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Bad Request
+    status: 400
+    detail: Invalid request content.
+    instance: "{{request.path}}"
+    field_errors:
+      mileage: must not be negative
+---
+name: should return 400 for invalid region
+request:
+  method: GET
+  urlPath: /factors/v1/car/risk
+  headers:
+    Accept: application/json, application/problem+json
+  queryParameters:
+    mileage: 1000
+    regionId: 1aba33ab-5261-3286-95b4-865265d9e768
+    postcode: 12345
+    vehicle: CABRIO
+response:
+  status: 400
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Bad Request
+    status: 400
+    detail: Invalid request content.
+    instance: "{{request.path}}"
+    errors:
+      - Either regionId or postcode must be set.
+---
+name: should return 400 for invalid region 2
+request:
+  method: GET
+  urlPath: /factors/v1/car/risk
+  headers:
+    Accept: application/json, application/problem+json
+  queryParameters:
+    mileage: 1000
+    vehicle: CABRIO
+response:
+  status: 400
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Bad Request
+    status: 400
+    detail: Invalid request content.
+    instance: "{{request.path}}"
+    errors:
+      - Either regionId or postcode must be set.
+---
+name: should return 400 for invalid vehicle
+request:
+  method: GET
+  urlPath: /factors/v1/car/risk
+  headers:
+    Accept: application/json, application/problem+json
+  queryParameters:
+    mileage: 1000
+    regionId: 1aba33ab-5261-3286-95b4-865265d9e768
+    vehicle: INVALID
+response:
+  status: 400
+  headers:
+    Content-Type: application/problem+json
+  body:
+    type: about:blank
+    title: Bad Request
+    status: 400
+    detail: Invalid request content.
+    instance: "{{request.path}}"
+    field_errors:
+      vehicle: Invalid value. Must be one of [CABRIO, COMBI, COMPACT, COUPE, LIMOUSINE, MINIVAN, PICKUP, ROADSTER, SUV, VAN]

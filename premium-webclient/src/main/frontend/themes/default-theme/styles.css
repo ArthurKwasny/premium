@@ -1,0 +1,54 @@
+html {
+  background: #eee;
+}
+
+vaadin-form-layout {
+  max-width: 66rem;
+}
+
+/* RegionSelect.java */
+.region-composite {
+  display: flex;
+  flex-direction: row;
+
+  vaadin-integer-field {
+    width: 14ch;
+    flex-shrink: 0;
+    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+  }
+
+  vaadin-select {
+    width: 10ch;
+    flex-grow: 1;
+  }
+}
+
+/* CardComponent.java */
+.card {
+  background: #fff;
+  border: .1em solid #ccc;
+  border-radius: var(--lumo-border-radius-l);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+  padding-bottom: .5em;
+  margin-bottom: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+
+  h3 {
+    margin: 0;
+    font-size: var(--lumo-font-size-xl);
+  }
+
+  .descr {
+    margin: 8px 0px;
+    color: #666;
+  }
+
+  .bottombar {
+    margin: 0px;
+    font-weight: bold;
+
+    .price {
+      color: var(--lumo-success-text-color);
+    }
+  }
+}

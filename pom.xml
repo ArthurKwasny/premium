@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.1</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <groupId>de.kwasny.premium</groupId>
+  <artifactId>premium</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>Parent pom providing dependency and plugin management for this project.</description>
+  <url>https://github.com/ArthurKwasny/premium</url>
+  <developers>
+    <developer>
+      <name>Arthur Kwasny</name>
+      <email>arthurkwasny@gmail.com</email>
+    </developer>
+  </developers>
+
+  <modules>
+    <module>premium-commons</module>
+    <module>premium-restclients</module>
+    <module>premium-data-provider</module>
+    <module>premium-quote</module>
+    <module>premium-restproxy</module>
+    <module>premium-test</module>
+    <module>premium-webclient</module>
+  </modules>
+
+  <scm>
+    <url>https://github.com/ArthurKwasny/premium</url>
+  </scm>
+
+  <properties>
+    <spring.version>3.4.1</spring.version><!--align with spring-boot-starter-parent-->
+    <spring-cloud.version>4.2.0</spring-cloud.version>
+    <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
+    <vaadin.version>24.6.0</vaadin.version>
+    <org.mapstruct.version>1.6.3</org.mapstruct.version>
+    <org.mapstruct.extensions.spring.version>1.1.2</org.mapstruct.extensions.spring.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <version>${spring.version}</version>
+        <scope>compile</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+          </exclusion>
+          <exclusion><!--use jetty instead-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!--Testing-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
